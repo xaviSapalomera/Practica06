@@ -4,24 +4,24 @@
 
 include './model/model_usuaris.php';
 
-// Configuración de intentos fallidos
+// Posa els els intents a 0
 if (!isset($_SESSION['intents_fallits'])) {
     $_SESSION['intents_fallits'] = 0;
 }
 
-// Verifica si la sesión debe mantenerse activa
+// Verifica si la sesió esta activa
 if (isset($_SESSION['mantindre_sessio']) && $_SESSION['mantindre_sessio'] === true) {
     header('Location: index_session.php');
     exit();
 }
 
-// Cuando se hace el login
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['LOGIN'])) {
     $correu = filter_var($_POST['correu'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
     $contrasenya_hash = hash('sha256', $password);
 
-    // Verifica intentos fallidos y reCAPTCHA
+    // Verifica els intents fallits
     if ($_SESSION['intents_fallits'] >= 3) {
         if (empty($_POST['g-recaptcha-response']) || !validateRecaptcha($secretKey, $_POST['g-recaptcha-response'])) {
             echo "<p style='color: red; text-align: center;'>ReCAPTCHA incorrecto. Intenta de nuevo.</p>";
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['LOGIN'])) {
     }
 }
 
-// Función para validar el reCAPTCHA
+// Funció per validar el reCAPTCHA
 function validateRecaptcha($secretKey, $recaptchaResponse) {
     if (empty($recaptchaResponse)) {
         return false;
@@ -54,7 +54,7 @@ function validateRecaptcha($secretKey, $recaptchaResponse) {
         'response' => $recaptchaResponse
     ];
 
-    // Usa cURL para mayor fiabilidad
+    
     $ch = curl_init($verificationUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -65,7 +65,7 @@ function validateRecaptcha($secretKey, $recaptchaResponse) {
     return $responseKeys['success'] ?? false;
 }
 
-// Función para verificar login
+// Funció per verificar el login
 function verificarLogin($correu, $password) {
 
     $UsuariModel = new Usuari();
@@ -81,7 +81,7 @@ function verificarLogin($correu, $password) {
     return false;
 }
 
-// Función para gestionar el usuario verificado
+// Funció per gestionar l'usuari verificat
 function functionVerificarConta($loginVerificat, $correu, $rememberME) {
     $usuariModel = new Usuari();
     if ($loginVerificat) {
@@ -95,13 +95,13 @@ function functionVerificarConta($loginVerificat, $correu, $rememberME) {
 
         $resultat = $usuariModel->perfilDades($correu);
 
-        // Verificar si se obtuvo un resultado válido
+        
         if ($resultat && is_array($resultat)) {
             $_SESSION['nickname'] = $resultat['nickname'];
         }
 
         if ($rememberME) {
-            setcookie("remember_me", $correu, time() + (86400 * 30), "/", "", true, true); // 30 días
+            setcookie("remember_me", $correu, time() + (86400 * 30), "/", "", true, true); 
         }
 
         header('Location: index_session.php');
