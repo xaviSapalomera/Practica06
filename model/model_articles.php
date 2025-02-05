@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';  // Asegúrate de que la ruta sea correcta
+require __DIR__ . '/../vendor/autoload.php';  
 
 use Dotenv\Dotenv;
 
@@ -27,6 +27,7 @@ class Article {
         }
     }
 
+    //Actualitza tots els articles
     public function actualitzarArticle($titol, $cos, $id) {
         try {
             $stmt = $this->connexio->prepare("UPDATE articles SET titol = ?, cos = ? WHERE id = ?");
@@ -37,7 +38,7 @@ class Article {
             return false;
         }
     }
-
+//Troba els articles per ID
     public function trobarArticlePerID($id) {
         try {
             $stmt = $this->connexio->prepare('SELECT titol, cos FROM articles WHERE id = ? LIMIT 1');
@@ -48,7 +49,7 @@ class Article {
             return null;
         }
     }
-
+// Introduir Articles
     public function introduirArticles($titol, $cos, $data, $user_id) {
         try {
             $stmt = $this->connexio->prepare("INSERT INTO articles (titol, cos, data, user_id) VALUES (?, ?, ?, ?)");
@@ -64,17 +65,17 @@ class Article {
         }
     
     }
-
+// Mostra tots el articles
     public function mostrarTotsArticles() {
         try {
             $stmt = $this->connexio->query("SELECT id, titol, cos, data, user_id FROM articles");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC); // 🔹 Añade FETCH_ASSOC para un mejor formato JSON
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Error al mostrar todos los artículos: " . $e->getMessage());
             return false;
         }
     }
-
+// Borrar el articles per ID
     public function borrarArticles($id) {
         try {
             $stmt = $this->connexio->prepare("DELETE FROM articles WHERE id = ?");
@@ -84,7 +85,7 @@ class Article {
             return false;
         }
     }
-
+Ordenar els articles segun la columna
     public function mostrarArticlesOrdenats($columna, $ordre) {
         $columnasPermitidas = ['id', 'titol'];
         $ordenesPermitidos = ['ASC', 'DESC'];
