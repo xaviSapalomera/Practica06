@@ -26,7 +26,7 @@ class Usuari {
             die("Error al conectar a la base de datos: " . $e->getMessage());
         }
     }
-
+//Crear Usuaris
     public function crearUsuari($dni, $nom, $cognom, $email, $contrasenya) {
         try {
             $stmt = $this->connexio->prepare('INSERT INTO usuaris (dni, nom, cognom, email, contrasenya) VALUES (?, ?, ?, ?, ?)');
@@ -37,7 +37,7 @@ class Usuari {
             return false;
         }
     }
-
+// Mostrar tots els usuaris
     public function mostrarUsuaris() {
         try {   
             $stmt = $this->connexio->query('SELECT id, nom, nickname, cognom, dni, email, contrasenya, admin FROM usuaris');
@@ -58,7 +58,7 @@ class Usuari {
             return null;
         }
     }
-
+// Actualitzar password del usuari
     public function actualitzarPassword($id, $password) {
         try {
             $password_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -70,7 +70,7 @@ class Usuari {
             return false;
         }
     }
-
+//Actualitzar el nickname del usuari
     public function actualitzarNickname($id, $nickname) {
         try {
             $stmt = $this->connexio->prepare('UPDATE usuaris SET nickname = ? WHERE id = ?');
@@ -81,6 +81,7 @@ class Usuari {
             return false;
         }
     }
+    //Actualitzar el Email del usuari
     public function actualitzarEmail($id, $correu) {
         try {
             $stmt = $this->connexio->prepare('UPDATE usuaris SET correu = ? WHERE id = ?');
@@ -91,7 +92,7 @@ class Usuari {
             return false;
         }
     }
-
+//Filtrar usuaris per ID
     public function filtrarUsuarisPerID($id) {
         try {
             $stmt = $this->connexio->prepare('SELECT id, nickname, nom, cognom, dni, email, contrasenya FROM usuaris WHERE id = ? LIMIT 1');
