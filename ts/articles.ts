@@ -40,45 +40,45 @@ function loadArticles() {
     console.log("Iniciando carga de artículos...");
 
     const fetchSpinnerId = "#spinner"; 
-    $(fetchSpinnerId).show(); // Mostrar spinner
+    $(fetchSpinnerId).show(); 
 
     $.ajax({
         type: 'GET',
         url: 'http://localhost/Practica06-main/model/model_ajax_article.php?action=mostrarTotsArticles', 
         dataType: "json",
         success: function(response) {
-            console.log("Respuesta recibida:", response);
+            console.log("Peticio correcte:", response);
 
             if (response.error) {
-                console.error("Error en la respuesta:", response.error);
+                console.error("Error en la peticio:", response.error);
                 return;
             }
 
-            // Crear artículos a partir de la respuesta
+            
             let articles: Article[] = response.map((data: any) => {
                 return new Article(data.id, data.titol, data.cos, data.user_id, data.data);
             });
 
-            // Mostrar los artículos
+            
             mostrarArticles(articles);
         },
         error: function(xhr, status, error) {
             console.error("Error AJAX:", status, error);
-            console.error("Respuesta del servidor:", xhr.responseText); // 🛠 Muestra la respuesta completa
+            console.error("Respuesta del servidor:", xhr.responseText);
         }
     });
 }
 
 function mostrarArticles(articles: Article[]) {
     const articlesContainer = $(".articles-blocks");
-    articlesContainer.empty(); // Limpiar el contenedor antes de agregar nuevos artículos
+    articlesContainer.empty(); 
 
     if (articles.length === 0) {
         articlesContainer.append("<p>No hi ha articles disponibles.</p>");
         return;
     }
 
-    // Iterar sobre los artículos y mostrarlos
+    
     articles.forEach(article => {
         const articleHtml = `
             <div class="article-block">
@@ -112,7 +112,7 @@ function mostrarArticles(articles: Article[]) {
     });
 }
 
-// Cargar los artículos al inicio
+
 $(document).ready(function() {
     loadArticles();
 });
