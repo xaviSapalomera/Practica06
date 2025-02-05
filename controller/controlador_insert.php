@@ -9,7 +9,7 @@ include './model/model_usuaris.php';
 echo '<script src="./ts/js/articles_control.js"></script>';
 echo '<link rel="stylesheet" href="./estil/pop_up.css">';
 
-// Controla la introducción del título y el cuerpo
+// Verifica el titol i el cos introduit
 if (isset($_POST["titol"]) && isset($_POST['cos'])) {
 
     $articleModel = new Article();
@@ -20,14 +20,14 @@ if (isset($_POST["titol"]) && isset($_POST['cos'])) {
     $data = date("Y-m-d");
     $correu = $_SESSION['correu'];      
 
-    // Obtener el ID del usuario
-    $IDusuaris = $usuariModel->perfilDades($correu); // Llamada al método
+    // Funcio per tindre el id deñ usuari
+    $IDusuaris = $usuariModel->perfilDades($correu); 
 
     if ($IDusuaris && isset($IDusuaris['id'])) {
-        $id_usuari = $IDusuaris['id']; // Acceso directo al arreglo asociativo
+        $id_usuari = $IDusuaris['id']; 
 
 
-        // Insertar el artículo
+        // Inserta el article
         $comprovacio = $articleModel->introduirArticles($post_Titol, $post_Cos, $data, $id_usuari);
 
         echo $comprovacio;
